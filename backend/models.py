@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Numeric, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Numeric, DateTime, Date, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from database import Base
@@ -16,6 +16,7 @@ class Employee(Base):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     salary_raises = relationship("SalaryRaise", back_populates="employee")
+    semester_uttag = relationship("SemesterUttag", back_populates="employee")
 
 
 class SalaryRaise(Base):
@@ -30,3 +31,16 @@ class SalaryRaise(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     employee = relationship("Employee", back_populates="salary_raises")
+
+
+class SemesterUttag(Base):
+    """Registrerar semesteruttag per anställd."""
+    __tablename__ = "semester_uttag"
+
+    id = Column(Integer, primary_key=True, index=True)
+    employee_id = Column(Integer, ForeignKey("employees.id", ondelete="CASCADE"), nullable=False)
+    antal_dagar = Column(Integer, nullable=False)
+    datum = Column(Date, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    employee = relationship("Employee", back_populates="semester_uttag")

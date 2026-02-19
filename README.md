@@ -12,6 +12,8 @@ lonasystem/
 │   ├── models.py     # SQLAlchemy-modeller
 │   ├── schemas.py    # Pydantic-scheman
 │   ├── crud.py       # CRUD-operationer
+│   ├── tax.py        # Skatteberäkning (kommunal 32%, statlig 20% över 540k)
+│   ├── pdf_service.py # Lönespec PDF (reportlab)
 │   └── requirements.txt
 ├── frontend/         # React + Tailwind
 │   ├── src/
@@ -116,6 +118,32 @@ npm run dev
   "orsak": "Årlig löneökning"
 }
 ```
+
+### Lönespec PDF
+
+| Metod | Endpoint | Beskrivning |
+|-------|----------|-------------|
+| GET | `/api/employees/{id}/payslip?month=&year=` | Ladda ner lönespec som PDF |
+
+### Skatteberäkning
+
+| Metod | Endpoint | Beskrivning |
+|-------|----------|-------------|
+| GET | `/api/tax/calculate?employee_id=` | Beräkna skatt för anställd (kommunal 32%, statlig 20% över 540 000 kr/år) |
+
+### Semester
+
+| Metod | Endpoint | Beskrivning |
+|-------|----------|-------------|
+| GET | `/api/semester/saldo?year=` | Lista semesterbalans per anställd (25 dagar/år) |
+| GET | `/api/semester/uttag` | Lista semesteruttag |
+| POST | `/api/semester/uttag` | Registrera semesteruttag |
+
+### Månadsrapport
+
+| Metod | Endpoint | Beskrivning |
+|-------|----------|-------------|
+| GET | `/api/reports/monthly?year=&month=` | Total lönekostnad, antal anställda, semesteruttag |
 
 ## Licens
 

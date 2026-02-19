@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 from decimal import Decimal
-from datetime import datetime
+from datetime import datetime, date
 from typing import Optional
 
 
@@ -49,3 +49,44 @@ class SalaryRaiseResponse(SalaryRaiseBase):
 
     class Config:
         from_attributes = True
+
+
+class SemesterUttagCreate(BaseModel):
+    employee_id: int
+    antal_dagar: int = Field(..., ge=1, le=365)
+    datum: date
+
+
+class SemesterUttagResponse(BaseModel):
+    id: int
+    employee_id: int
+    antal_dagar: int
+    datum: date
+    created_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+
+class SemesterSaldoResponse(BaseModel):
+    employee_id: int
+    year: int
+    dagar_tillagda: int = 25
+    dagar_uttagna: int
+    saldo: int
+
+
+class ManadsrapportResponse(BaseModel):
+    year: int
+    month: int
+    total_lonekostnad: Decimal
+    antal_anstallda: int
+    semester_uttag_dagar: int
+
+
+class SkatteberakningResponse(BaseModel):
+    bruttolon: Decimal
+    kommunalskatt: Decimal
+    statlig_skatt: Decimal
+    total_skatt: Decimal
+    nettolon: Decimal
